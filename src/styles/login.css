@@ -1,0 +1,59 @@
+body {
+    background: linear-gradient(to bottom right, #B2FAB3, #118985);
+    background-repeat: no-repeat;
+    overflow-y: scroll;
+    min-height: 100vh;
+}
+
+header {
+    text-align: right;
+    padding-top: 1em;
+}
+
+footer {
+    background-color: black;
+    color: white;
+    padding: 0.3em 0.3em 0.3em 0.3em;
+    width: 100%;
+    text-align: center;
+}
+
+.info-btn {
+    margin-right: 1em;
+    cursor: pointer;
+    color: black;
+}
+
+.info-btn:hover {
+    color: white;
+}
+
+.game-title {
+    text-align: center;
+    font-size: 4em;
+    font-family: fantasy;
+}
+
+.form-input {
+    width: 15em !important;
+    margin: 0 auto;
+}
+
+.username {
+    margin: 0;;
+}
+
+.submit-button {
+    border-radius: 10em;
+    width: 10em;
+    padding: 0.5em 0.5em 0.5em 0.5em;
+    background: linear-gradient(to bottom left, #B7A2F9, #3F03FB);
+}
+
+.submit-button:hover {
+    color: #B2FAB3;
+}
+
+.login {
+    margin-bottom: 5em;
+}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Título e icono de la página web -->
+        <title>Tres en raya</title>
+        <link  rel="icon"   href="../../assets/images/favicon.jpg" type="image/jpg">
+
+        <!-- Enlaces a ficheros de estilo (css) y scripts -->
+        <link rel="stylesheet" type="text/css" href="../styles/login.css">
+
+        <!-- Enlace a la librería de iconos de font awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="../js/login.js" defer></script>
+
+        <!-- Enlaces y scripts necesarios para el funcioamiento de Bootstrap -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <header class="container-fluid">
+            <!-- Botón de ayuda que lleva a la wikipedia del tres en línea -->
+            <a class="info-btn" target="_blank" href="https://es.wikipedia.org/wiki/Tres_en_l%C3%ADnea#:~:text=Tres%20en%20l%C3%ADnea%3A%20Es%20una,moverse%20una%20intersecci%C3%B3n%20por%20turno.">
+                <span><i class="fa fa-question-circle fa-3x"></i></span>
+            </a>
+        </header>
+
+        <main class="container-fluid row mt-3 text-center">
+            <!-- Título del juego -->
+            <div class="col-12 game-title">
+                TRES EN RAYA
+            </div>
+
+            <div class="col-md-6 col-sm-12 register mt-4"> 
+                <form id="form">
+                    <h3>Registro</h3>
+                    <div class="input-group mb-3 form-input">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-user"></i></span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Nombre de usuario" aria-label="Username" maxlength="20" aria-describedby="basic-addon1" id="register-username">
+                    </div>
+                    <div class="input-group mb-3 form-input">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon2"><i class="fa fa-lock"></i></span>
+                        </div>
+                        <input type="password" class="form-control" placeholder="Contraseña" aria-label="Password" maxlength="20" aria-describedby="basic-addon2" id="register-password">
+                    </div>
+                    <div class="input-group mb-3 form-input">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon3"><i class="fa fa-lock"></i></span>
+                        </div>
+                        <input type="password" class="form-control" placeholder="Repetir contraseña" aria-label="Password2" maxlength="20" aria-describedby="basic-addon3" id="register-second-password">
+                    </div>
+                    <input type="button" class="mt-4 submit-button register-button" value="Registrarse">
+                </form>
+            </div>
+
+            <div class="col-md-6 col-sm-12 login mt-4"> 
+                <form>
+                    <h3>Login</h3>
+                    <div class="input-group mb-3 form-input">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon4"><i class="fa fa-user"></i></span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Nombre de usuario" aria-label="Username" maxlength="20" aria-describedby="basic-addon4" id="login-username">
+                    </div>
+                    <div class="input-group mb-3 form-input">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon5"><i class="fa fa-lock"></i></span>
+                        </div>
+                        <input type="password" class="form-control" placeholder="Contraseña" aria-label="Password" maxlength="20" aria-describedby="basic-addon5" id="login-password">
+                    </div>
+                    <input type="button" class="mt-4 submit-button login-button" value="Login">
+                </form>
+            </div>
+        </main>
+
+        <footer class="container-fluid fixed-bottom">
+            <!-- Texto con el nombre del creador y el copyright -->
+            <small>Proyecto desarrollado por Alberto Hernández Pintor - Máster MIMO V3.0 <i class="fa fa-copyright"></i></small> 
+        </footer>
+    </body>
+</html>

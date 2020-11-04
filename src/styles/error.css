@@ -1,0 +1,6 @@
+body {
+    background: linear-gradient(to bottom right, #B2FAB3, #118985);
+    background-repeat: no-repeat;
+    overflow-y: scroll;
+    min-height: 100vh;
+}

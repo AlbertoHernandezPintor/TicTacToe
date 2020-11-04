@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Título e icono de la página web -->
+        <title>Tres en raya</title>
+        <link  rel="icon"   href="../../assets/images/favicon.jpg" type="image/jpg">
+
+        <!-- Enlaces a ficheros de estilo (css) y scripts -->
+        <link rel="stylesheet" type="text/css" href="../styles/stats.css">
+        <script src="../js/stats.js" defer></script>
+
+        <!-- Enlace a la librería de iconos de font awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <!-- Enlaces y scripts necesarios para el funcioamiento de Bootstrap -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <header class="container-fluid">
+            <!-- Botón de ayuda que lleva a la wikipedia del tres en línea -->
+            <a class="info-btn" target="_blank" href="https://es.wikipedia.org/wiki/Tres_en_l%C3%ADnea#:~:text=Tres%20en%20l%C3%ADnea%3A%20Es%20una,moverse%20una%20intersecci%C3%B3n%20por%20turno.">
+                <span><i class="fa fa-question-circle fa-3x"></i></span>
+            </a>
+            <!-- Botón de estadísticas -->
+            <a class="info-btn sign-out">
+                <span><i class="fa fa-user-circle fa-3x"></i></span>
+            </a>
+        </header>
+
+        <main class="container-fluid row mt-3">
+            <!-- Título del juego -->
+            <div class="col-12 game-title">
+                Estadísticas
+            </div>
+            
+            <div class="col-12 stats-table">
+            </div>
+
+            <div class="col-12 per text-center">
+            </div>
+
+            <div class="col-12 text-center">
+                <input type="button" class="mt-4 return-button" value="Volver a la pantalla de partida">
+            </div>
+        </main>
+
+        <footer class="container-fluid fixed-bottom">
+            <!-- Texto con el nombre del creador y el copyright -->
+            <small>Proyecto desarrollado por Alberto Hernández Pintor - Máster MIMO V3.0 <i class="fa fa-copyright"></i></small> 
+        </footer>
+    </body>
+</html>

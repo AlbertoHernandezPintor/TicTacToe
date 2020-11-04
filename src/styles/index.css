@@ -1,0 +1,107 @@
+body {
+    background: linear-gradient(to bottom right, #B2FAB3, #118985);
+    background-repeat: no-repeat;
+    overflow-y: scroll;
+    min-height: 100vh;
+}
+
+header {
+text-align: right;
+padding-top: 1em;
+}
+
+#game-table {
+    min-height: 50vh;
+    margin-bottom: 5em;
+}
+
+.info-btn {
+    margin-right: 1em;
+    cursor: pointer;
+    color: black;
+}
+
+.disable {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.no-events {
+    pointer-events: none;
+}
+
+.info-btn:hover {
+    color: white;
+}
+
+footer {
+    background-color: black;
+    color: white;
+    padding: 0.3em 0.3em 0.3em 0.3em;
+    width: 100%;
+    text-align: center;
+}
+
+.game-title {
+    text-align: center;
+    font-size: 4em;
+    font-family: fantasy;
+}
+
+.game-config {
+    border-bottom: black 2px solid;
+    padding-bottom: 0.5em;
+    margin-left: 1.5em;
+}
+
+.radio-onePlayer {
+    padding-right: 2.5em !important;
+}
+
+.radio-easy {
+    padding-right: 2.2em !important;
+}
+
+.radio-hard {
+    padding-right: 1.7em !important;
+}
+
+.radio-medium {
+    padding-left: 2.5em !important;
+}
+
+input[type="radio"] {
+    cursor: pointer;
+}
+
+label {
+    cursor: pointer;
+}
+
+.submit-button {
+    border-radius: 10em;
+    width: 10em;
+    padding: 0.5em 0.5em 0.5em 0.5em;
+    background: linear-gradient(to bottom left, #B7A2F9, #3F03FB);
+}
+
+.reset-button {
+    border-radius: 10em;
+    width: 10em;
+    padding: 0.5em 0.5em 0.5em 0.5em;
+    background: linear-gradient(to bottom left, #B7A2F9, #3F03FB);
+}
+
+.submit-button:hover {
+    color: #B2FAB3;
+}
+
+.reset-button:hover {
+    color: #B2FAB3;
+}
+
+video {
+    width: 50%;
+    height: 50%;
+    margin-top: 2em;
+}
