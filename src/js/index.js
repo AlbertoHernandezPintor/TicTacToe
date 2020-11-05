@@ -31,8 +31,8 @@ function cameraHandler() {
 
 // Función para ir a las estadíticas
 function goToStats() {
-    var stats = new Stats();
-    var username = stats.getParameterByName("username");
+    let url = new URL(document.location.href);
+    var username = url.searchParams.get("username");
 
     document.location.target = "_self";
     document.location.href = "stats.html?username=" + username;
@@ -40,8 +40,8 @@ function goToStats() {
 
 // Función para cerrar sesión
 function signOut() {
-    var stats = new Stats();
-    var username = stats.getParameterByName("username");
+    let url = new URL(document.location.href);
+    var username = url.searchParams.get("username");
 
     sessionStorage.removeItem(username);
 
@@ -91,15 +91,15 @@ function formSubmit() {
         var match = new Match(gameMode, gameDifficulty, 1, {"00": 0, "01": 0, "02": 0, "10": 0, "11": 0, "12": 0, "20": 0, "21": 0, "22": 0},
         ["00", "01", "02", "10", "11", "12", "20", "21", "22"], 0);
 
-        var stats = new Stats();
-        var username = stats.getParameterByName("username");
+        let url = new URL(document.location.href);
+        var username = url.searchParams.get("username");
         if (gameMode === "onePlayer") {
             const webcamElement = document.getElementById('webcam');
             const canvasElement = document.getElementById('canvas');
             const webcam = new Webcam(webcamElement, 'user', canvasElement);
             var picture = webcam.snap();
 
-            stats.incrementMatches(username, "init");
+            match.incrementMatches(username, "init");
         } else {
             var picture = "../../assets/images/cross.png";
         }
@@ -107,7 +107,7 @@ function formSubmit() {
         var iaHandler = new IaHandler();
         var indexHandler = new IndexHandler();
         var gameHandler = new GameHandler();
-        gameHandler.createTable(match, indexHandler, iaHandler, alertsHandler, stats, username, picture);
+        gameHandler.createTable(match, indexHandler, iaHandler, alertsHandler, username, picture);
     }
 } 
 
@@ -132,9 +132,10 @@ function resetMatch() {
     }
 
     if (winAlert === null) {
-        var stats = new Stats();
-        var username = stats.getParameterByName("username");
-        stats.incrementMatches(username, "giveUp");
+        var match = new Match();
+        let url = new URL(document.location.href);
+        var username = url.searchParams.get("username");
+        match.incrementMatches(username, "giveUp");
     }
 }
 
@@ -161,48 +162,6 @@ function playerSelected() {
 /*          Clases          */
 /* ************************ */
 
-// Clase para el posterior manejo de estadísticas
-class Stats {
-
-    constructor() {
-    }
-
-    // Función que incrementa las estadíticas
-    incrementMatches(username, type) {
-        if (localStorage.getItem(username + "Stats") === null) {
-            var stats = {'total': 1, 'wins': 0, 'lost': 0, 'tie': 0, 'giveUp': 0};
-            localStorage.setItem(username + "Stats", JSON.stringify(stats));
-        } else {
-            var stats = JSON.parse(localStorage.getItem(username + "Stats"));
-            if (type === "init") {
-                stats.total += 1;
-            } else if (type === "giveUp") {
-                stats.giveUp += 1;
-            } else if (type === "win") {
-                stats.wins += 1;
-            } else if (type === "lost") {
-                stats.lost += 1;
-            } else if (type === "tie") {
-                stats.tie += 1;
-            }
-            localStorage.setItem(username + "Stats", JSON.stringify(stats));
-        }
-    }
-
-    // Función que obtiene de los parámetros de la url el valor del username
-    getParameterByName(username) {
-        var url = window.location.search.substring(1);
-         var urlVar = url.split('&');
-          for (var i = 0; i < urlVar.length; i++) {
-            var param = urlVar[i].split('=');
-            if (param[0] == username) {
-              return param[1];
-            }
-          }
-         return null;
-    }
-}
-
 // Clase que alamacena los datos de la partida
 class Match {
 
@@ -225,7 +184,7 @@ class Match {
     }
 
     // Función que muestra quien ha ganado en casa de que haya un ganador
-    checkPlay(match, indexHandler, alertsHandler, stats, username) {
+    checkPlay(match, indexHandler, alertsHandler, username) {
         match.checkVictory(match, indexHandler);
 
         if (match.winner === 1) {
@@ -238,7 +197,7 @@ class Match {
             var table = document.querySelector('table');
             table.classList.add("disable");
             if (match.gameMode === "onePlayer") {
-                stats.incrementMatches(username, "win")
+                match.incrementMatches(username, "win")
             }
         } else if (match.winner === 2) {
             var gameTable = document.querySelector('#game-table');
@@ -246,7 +205,7 @@ class Match {
             var table = document.querySelector('table');
             table.classList.add("disable");
             if (match.gameMode === "onePlayer") {
-                stats.incrementMatches(username, "lost")
+                match.incrementMatches(username, "lost")
             }
         } else if (match.freeOptions.length === 0 && match.winner !== 1 && match.winner !== 2) {
             var gameTable = document.querySelector('#game-table');
@@ -255,7 +214,7 @@ class Match {
             table.classList.add("disable");
             match.winner = 3;
             if (match.gameMode === "onePlayer") {
-                stats.incrementMatches(username, "tie")
+                match.incrementMatches(username, "tie")
             }
         }
     }
@@ -366,6 +325,28 @@ class Match {
             return winner;
         }
     }
+
+    // Función que incrementa las estadíticas
+    incrementMatches(username, type) {
+        if (localStorage.getItem(username + "Stats") === null) {
+            var stats = {'total': 1, 'wins': 0, 'lost': 0, 'tie': 0, 'giveUp': 0};
+            localStorage.setItem(username + "Stats", JSON.stringify(stats));
+        } else {
+            var stats = JSON.parse(localStorage.getItem(username + "Stats"));
+            if (type === "init") {
+                stats.total += 1;
+            } else if (type === "giveUp") {
+                stats.giveUp += 1;
+            } else if (type === "win") {
+                stats.wins += 1;
+            } else if (type === "lost") {
+                stats.lost += 1;
+            } else if (type === "tie") {
+                stats.tie += 1;
+            }
+            localStorage.setItem(username + "Stats", JSON.stringify(stats));
+        }
+    }
 }
 
 // Clase para el manejo de indices
@@ -404,7 +385,7 @@ class GameHandler {
     }
 
     // Función que recibe la fila y la columna pulsada para saber donde poner la ficha correspondiente
-    static setTableBox(row, col, match, indexHandler, iaHandler, alertsHandler, stats, username, picture) {
+    static setTableBox(row, col, match, indexHandler, iaHandler, alertsHandler, username, picture) {
         var index = indexHandler.createIndex(row, col);
         var boxClass = "." + "box" + index;
         var clickedBox = document.querySelector(boxClass);
@@ -440,14 +421,14 @@ class GameHandler {
 
         clickedBox.appendChild(image);
         match.deleteFreeOption(index, match);
-        match.checkPlay(match, indexHandler, alertsHandler, stats, username);
+        match.checkPlay(match, indexHandler, alertsHandler, username);
         if (match.gameMode === "onePlayer" && match.winner === 0) {
-            iaHandler.iaPlay(match, indexHandler, alertsHandler, stats, username);
+            iaHandler.iaPlay(match, indexHandler, alertsHandler, username);
         }
     }
         
     // Función que crea el tablero de partida
-    createTable(match, indexHandler, iaHandler, alertsHandler, stats, username, picture) {
+    createTable(match, indexHandler, iaHandler, alertsHandler, username, picture) {
         // Creamos la tabla y sus atributos
         var gameTable = document.createElement('table');
         gameTable.style.width = '50vh';
@@ -473,7 +454,7 @@ class GameHandler {
                 // Establecemos un evento para saber cuando una casilla ha sido pulsada
                 (function (i_copy, j_copy) {
                     td.addEventListener("click", function() {
-                        GameHandler.setTableBox(i_copy, j_copy, match, indexHandler, iaHandler, alertsHandler, stats, username, picture);
+                        GameHandler.setTableBox(i_copy, j_copy, match, indexHandler, iaHandler, alertsHandler, username, picture);
                     });
                 })(i, j);
         
@@ -533,26 +514,26 @@ class IaHandler {
     }
 
     // Función que define los movimientos de la IA
-    iaPlay(match, indexHandler, alertsHandler, stats, username) {
+    iaPlay(match, indexHandler, alertsHandler, username) {
         if (match.gameDifficulty === "easy") {
-            IaHandler.iaEasy(match, indexHandler, alertsHandler, stats, username);
+            IaHandler.iaEasy(match, indexHandler, alertsHandler, username);
         } else if (match.gameDifficulty === "medium") {
-            IaHandler.iaMedium(match, indexHandler, alertsHandler, stats, username);
+            IaHandler.iaMedium(match, indexHandler, alertsHandler, username);
         } else {
-            IaHandler.iaHard(match, indexHandler, alertsHandler, stats, username);
+            IaHandler.iaHard(match, indexHandler, alertsHandler, username);
         }
     }
 
     // Función de juego de la IA en modo fácil, movimientos aleatorios
-    static iaEasy(match, indexHandler, alertsHandler, stats, username) {
+    static iaEasy(match, indexHandler, alertsHandler, username) {
 
         var option = match.freeOptions[Math.floor(Math.random() * match.freeOptions.length)].toString();
 
-        IaHandler.setTableBoxIa(option, match, indexHandler, alertsHandler, stats, username);
+        IaHandler.setTableBoxIa(option, match, indexHandler, alertsHandler, username);
     }
 
     // Función de juego de la IA en modo intermedio, movimientos aleatorios y defiende jugadas de contrincante cuando solo le queda 1 para ganar
-    static iaMedium(match, indexHandler, alertsHandler, stats, username) {
+    static iaMedium(match, indexHandler, alertsHandler, username) {
         let selectedPosition = match.checkPosibleVictory(match, indexHandler);
         let findPos = 0;
 
@@ -571,16 +552,16 @@ class IaHandler {
             }
         }
 
-        IaHandler.setTableBoxIa(selectedPosition, match, indexHandler, alertsHandler, stats, username);
+        IaHandler.setTableBoxIa(selectedPosition, match, indexHandler, alertsHandler, username);
     }
 
     // Función de juego de la IA en modo difícil, algoritmo minimax
-    static iaHard(match, indexHandler, alertsHandler, stats, username) {
-        IaHandler.bestMove(match, indexHandler, alertsHandler, stats, username);
+    static iaHard(match, indexHandler, alertsHandler, username) {
+        IaHandler.bestMove(match, indexHandler, alertsHandler, username);
     }
 
     // Función que coloca la ficha de la IA en el tablero
-    static setTableBoxIa(option, match, indexHandler, alertsHandler, stats, username) {
+    static setTableBoxIa(option, match, indexHandler, alertsHandler, username) {
         var boxClass = "." + "box" + option;
         var clickedBox = document.querySelector(boxClass);
         clickedBox.classList.add("no-events");
@@ -596,11 +577,11 @@ class IaHandler {
 
         clickedBox.appendChild(image);
         match.deleteFreeOption(option, match);
-        match.checkPlay(match, indexHandler, alertsHandler, stats, username);
+        match.checkPlay(match, indexHandler, alertsHandler, username);
     }
 
     // Calcular el mejor movimiento posible para la IA
-    static bestMove(match, indexHandler, alertsHandler, stats, username) {
+    static bestMove(match, indexHandler, alertsHandler, username) {
         var bestScore = -Infinity;
 
         // Hay que probar cada una de las posiciones vacías
@@ -618,7 +599,7 @@ class IaHandler {
             }
         }
 
-        IaHandler.setTableBoxIa(move.toString(), match, indexHandler, alertsHandler, stats, username);
+        IaHandler.setTableBoxIa(move.toString(), match, indexHandler, alertsHandler, username);
     }
 
     // Función con el algoritmo minimax de la teoría de juegos

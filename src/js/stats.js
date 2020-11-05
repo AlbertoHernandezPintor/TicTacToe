@@ -19,8 +19,8 @@ function eventsHandler() {
 
 // Función para ir a la pantalla de juego
 function goToMatch() {
-    var stats = new Stats();
-    var username = stats.getParameterByName("username");
+    let url = new URL(document.location.href);
+    var username = url.searchParams.get("username");
 
     document.location.target = "_self";
     document.location.href = "index.html?username=" + username;
@@ -28,8 +28,8 @@ function goToMatch() {
 
 // Función para cerrar sesión
 function signOut() {
-    var stats = new Stats();
-    var username = stats.getParameterByName("username");
+    let url = new URL(document.location.href);
+    var username = url.searchParams.get("username");
 
     sessionStorage.removeItem(username);
 
@@ -40,8 +40,9 @@ function signOut() {
 // Función que maneja la creación de estadísticas
 function statsHandler() {
     var stats = new Stats();
+    let url = new URL(document.location.href);
     var tableNames = ["Ganados", "Perdidos", "Empatados", "Abandonados", "Totales"];
-    var username = stats.getParameterByName("username");
+    var username = url.searchParams.get("username");
     var userStats = stats.getUserStats(username);
     var arrayStats = [userStats.wins, userStats.lost, userStats.tie, userStats.giveUp, userStats.total];
 
@@ -137,18 +138,5 @@ class Stats {
         gameTable.appendChild(tableBody);
 
         document.querySelector('.stats-table').appendChild(gameTable);
-    }
-
-    // Función que obtiene de los parámetros de la url el valor del username
-    getParameterByName(username) {
-        var url = window.location.search.substring(1);
-         var urlVar = url.split('&');
-          for (var i = 0; i < urlVar.length; i++) {
-            var param = urlVar[i].split('=');
-            if (param[0] == username) {
-              return param[1];
-            }
-          }
-         return null;
     }
 }

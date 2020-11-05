@@ -6,12 +6,13 @@ eventsHandler();
 
 // Función que añade todos los eventos de elementos del html
 function eventsHandler() {
-    document.querySelector('.login-button').addEventListener("click", function(){login()});
-    document.querySelector('.register-button').addEventListener("click", function(){register()});
+    document.querySelector('#login-form').addEventListener("submit", function(){login()});
+    document.querySelector('#register-form').addEventListener("submit", function(){register()});
 }
 
 // Función que realiza todo lo necesario para el login
 function login() {
+    event.preventDefault();
     var username = document.querySelector('#login-username').value;
     var password = document.querySelector('#login-password').value;
 
@@ -22,6 +23,7 @@ function login() {
 
 // Función que realiza todo lo necesario para el registro
 function register() {
+    event.preventDefault();
     var username = document.querySelector('#register-username').value;
     var password = document.querySelector('#register-password').value;
     var secondPassword = document.querySelector('#register-second-password').value;
