@@ -1,56 +1,3 @@
-eventsHandler();
-
-/* ************************ */
-/*        Funciones         */
-/* ************************ */
-
-// Función que añade todos los eventos de elementos del html
-function eventsHandler() {
-    if (sessionStorage.length === 0) {
-        document.location.target = "_self";
-        document.location.href = "error.html";
-    }
-    document.querySelector('.sign-out').addEventListener("click", function(){signOut()});
-    document.querySelector('.return-button').addEventListener("click", function(){goToMatch()});
-    window.onload = function() {
-        statsHandler();
-    }
-}
-
-// Función para ir a la pantalla de juego
-function goToMatch() {
-    let url = new URL(document.location.href);
-    var username = url.searchParams.get("username");
-
-    document.location.target = "_self";
-    document.location.href = "index.html?username=" + username;
-}
-
-// Función para cerrar sesión
-function signOut() {
-    let url = new URL(document.location.href);
-    var username = url.searchParams.get("username");
-
-    sessionStorage.removeItem(username);
-
-    document.location.target = "_self";
-    document.location.href = "login.html";
-}
-
-// Función que maneja la creación de estadísticas
-function statsHandler() {
-    var stats = new Stats();
-    let url = new URL(document.location.href);
-    var tableNames = ["Ganados", "Perdidos", "Empatados", "Abandonados", "Totales"];
-    var username = url.searchParams.get("username");
-    var userStats = stats.getUserStats(username);
-    var arrayStats = [userStats.wins, userStats.lost, userStats.tie, userStats.giveUp, userStats.total];
-
-    stats.createStatsTable(tableNames, arrayStats);
-    stats.createProgressBars(tableNames, arrayStats);
-}
-
-
 /* ************************ */
 /*          Clases          */
 /* ************************ */
@@ -140,3 +87,61 @@ class Stats {
         document.querySelector('.stats-table').appendChild(gameTable);
     }
 }
+
+class IntiStatsHandler {
+
+    constructor() {
+    }
+
+    // Función que añade todos los eventos de elementos del html
+    eventsHandler() {
+        if (sessionStorage.length === 0) {
+            document.location.target = "_self";
+            document.location.href = "error.html";
+        }
+        document.querySelector('.sign-out').addEventListener("click", function(){IntiStatsHandler.signOut()});
+        document.querySelector('.return-button').addEventListener("click", function(){IntiStatsHandler.goToMatch()});
+        window.onload = function() {
+            IntiStatsHandler.statsHandler();
+        }
+    }
+
+    // Función para ir a la pantalla de juego
+    static goToMatch() {
+        let url = new URL(document.location.href);
+        var username = url.searchParams.get("username");
+
+        document.location.target = "_self";
+        document.location.href = "index.html?username=" + username;
+    }
+
+    // Función para cerrar sesión
+    static signOut() {
+        let url = new URL(document.location.href);
+        var username = url.searchParams.get("username");
+
+        sessionStorage.removeItem(username);
+
+        document.location.target = "_self";
+        document.location.href = "login.html";
+    }
+
+    // Función que maneja la creación de estadísticas
+    static statsHandler() {
+        var stats = new Stats();
+        let url = new URL(document.location.href);
+        var tableNames = ["Ganados", "Perdidos", "Empatados", "Abandonados", "Totales"];
+        var username = url.searchParams.get("username");
+        var userStats = stats.getUserStats(username);
+        var arrayStats = [userStats.wins, userStats.lost, userStats.tie, userStats.giveUp, userStats.total];
+
+        stats.createStatsTable(tableNames, arrayStats);
+        stats.createProgressBars(tableNames, arrayStats);
+    }
+}
+
+/* ************************ */
+/*          Inicio          */
+/* ************************ */
+var initStatsHandler = new IntiStatsHandler();
+initStatsHandler.eventsHandler();

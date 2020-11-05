@@ -1,38 +1,3 @@
-eventsHandler();
-
-/* ************************ */
-/*        Funciones         */
-/* ************************ */
-
-// Función que añade todos los eventos de elementos del html
-function eventsHandler() {
-    document.querySelector('#login-form').addEventListener("submit", function(){login()});
-    document.querySelector('#register-form').addEventListener("submit", function(){register()});
-}
-
-// Función que realiza todo lo necesario para el login
-function login() {
-    event.preventDefault();
-    var username = document.querySelector('#login-username').value;
-    var password = document.querySelector('#login-password').value;
-
-    var alertsHandler = new AlertsHandler();
-    var login = new Login();
-    login.login(username, password, alertsHandler);
-}
-
-// Función que realiza todo lo necesario para el registro
-function register() {
-    event.preventDefault();
-    var username = document.querySelector('#register-username').value;
-    var password = document.querySelector('#register-password').value;
-    var secondPassword = document.querySelector('#register-second-password').value;
-    
-    var alertsHandler = new AlertsHandler();
-    var register = new Register();
-    register.saveNewUser(username, password, secondPassword, alertsHandler);
-}
-
 /* ************************ */
 /*          Clases          */
 /* ************************ */
@@ -126,3 +91,44 @@ class AlertsHandler {
         }  
     }
 }
+
+class InitLoginRegisterHandler {
+
+    constructor() {
+    }
+
+    // Función que añade todos los eventos de elementos del html
+    eventsHandler() {
+        document.querySelector('#login-form').addEventListener("submit", function(){InitLoginRegisterHandler.login()});
+        document.querySelector('#register-form').addEventListener("submit", function(){InitLoginRegisterHandler.register()});
+    }
+
+    // Función que realiza todo lo necesario para el login
+    static login() {
+        event.preventDefault();
+        var username = document.querySelector('#login-username').value;
+        var password = document.querySelector('#login-password').value;
+
+        var alertsHandler = new AlertsHandler();
+        var login = new Login();
+        login.login(username, password, alertsHandler);
+    }
+
+    // Función que realiza todo lo necesario para el registro
+    static register() {
+        event.preventDefault();
+        var username = document.querySelector('#register-username').value;
+        var password = document.querySelector('#register-password').value;
+        var secondPassword = document.querySelector('#register-second-password').value;
+        
+        var alertsHandler = new AlertsHandler();
+        var register = new Register();
+        register.saveNewUser(username, password, secondPassword, alertsHandler);
+    }
+}
+
+/* ************************ */
+/*          Inicio          */
+/* ************************ */
+var initLoginRegisterHandler = new InitLoginRegisterHandler();
+initLoginRegisterHandler.eventsHandler();

@@ -1,163 +1,3 @@
-eventsHandler();
-
-/* ************************ */
-/*        Funciones         */
-/* ************************ */
-
-// Función que añade todos los eventos de elementos del html
-function eventsHandler() {
-    if (sessionStorage.length === 0) {
-        document.location.target = "_self";
-        document.location.href = "error.html";
-    }
-    document.querySelector('.radio-onePlayer').addEventListener("click", function(){playerSelected()});
-    document.querySelector('.stats').addEventListener("click", function(){goToStats()});
-    document.querySelector('.sign-out').addEventListener("click", function(){signOut()});
-    document.querySelector('.radio-twoPlayers').addEventListener("click", function(){playerSelected()});
-    document.querySelector('.submit-button').addEventListener("click", function(){formSubmit()});
-    document.querySelector('.reset-button').addEventListener("click", function(){resetMatch()});
-
-    cameraHandler();
-}
-
-// Función que maneja todo lo relacionado con la cámara
-function cameraHandler() {
-    const webcamElement = document.getElementById('webcam');
-    const canvasElement = document.getElementById('canvas');
-    const webcam = new Webcam(webcamElement, 'user', canvasElement);
-
-    webcam.start();
-}
-
-// Función para ir a las estadíticas
-function goToStats() {
-    let url = new URL(document.location.href);
-    var username = url.searchParams.get("username");
-
-    document.location.target = "_self";
-    document.location.href = "stats.html?username=" + username;
-}
-
-// Función para cerrar sesión
-function signOut() {
-    let url = new URL(document.location.href);
-    var username = url.searchParams.get("username");
-
-    sessionStorage.removeItem(username);
-
-    document.location.target = "_self";
-    document.location.href = "login.html";
-}
-
-// Función que se ejecuta cuando pulsamos sobre el botón comenzar partida
-function formSubmit() {
-    var alertsHandler = new AlertsHandler();
-
-    // Obtenemos las lista de radio buttons tanto del modo de juego como de la dificultad
-    var arrayGameMode = document.querySelectorAll('input[name="radio-gameMode"]:checked')[0];
-    var arrayGameDifficulty = document.querySelectorAll('input[name="radio-difficulty"]:checked')[0];
-
-    // Comprobamos si se han introducdo correctamente todos los datos necesarios, en caso negativo mensaje de error, en caso afirmativo
-    // se puede empezar la partida
-    if (arrayGameMode === undefined) {
-        var gameModeDiv = document.querySelector('.gameMode');
-        alertsHandler.createAlert("Seleccione un modo de juego", gameModeDiv, "alert-warning");
-    } else if (arrayGameDifficulty === undefined && arrayGameMode.id === "onePlayer"){
-        var difficultyDiv = document.querySelector('.difficulty');
-        alertsHandler.createAlert("Seleccione una dificultad", difficultyDiv, "alert-warning");
-    } else {
-        var gameMode = arrayGameMode.id;
-
-        if (arrayGameDifficulty !== undefined) {
-            var gameDifficulty = arrayGameDifficulty.id;
-        }
-
-        // Si queda alguna alerta abierta la cerramos
-        var confAlert = document.querySelector('.alert');
-        if(confAlert !== null) {
-            parent = confAlert.parentNode;
-            document.querySelector("." + parent.id).removeChild(confAlert);
-        }
-
-        // Deshabilitamos el form mientras se juega
-        var formControl = document.querySelector('#form-control');
-        formControl.classList.add("disable");
-
-        // Habilitamos el botón de resetear partida
-        var resetControl = document.querySelector('.reset-button');
-        resetControl.classList.remove("disable");
-
-        // Creamos el objeto partida
-        var match = new Match(gameMode, gameDifficulty, 1, {"00": 0, "01": 0, "02": 0, "10": 0, "11": 0, "12": 0, "20": 0, "21": 0, "22": 0},
-        ["00", "01", "02", "10", "11", "12", "20", "21", "22"], 0);
-
-        let url = new URL(document.location.href);
-        var username = url.searchParams.get("username");
-        if (gameMode === "onePlayer") {
-            const webcamElement = document.getElementById('webcam');
-            const canvasElement = document.getElementById('canvas');
-            const webcam = new Webcam(webcamElement, 'user', canvasElement);
-            var picture = webcam.snap();
-
-            match.incrementMatches(username, "init");
-        } else {
-            var picture = "../../assets/images/cross.png";
-        }
-
-        var iaHandler = new IaHandler();
-        var indexHandler = new IndexHandler();
-        var gameHandler = new GameHandler();
-        gameHandler.createTable(match, indexHandler, iaHandler, alertsHandler, username, picture);
-    }
-} 
-
-// Función que resetea la partida
-function resetMatch() {
-    // Habilitamos el form 
-    var formControl = document.querySelector('#form-control');
-    formControl.classList.remove("disable");
-
-    // Deshabilitamos el botón de resetear partida
-    var resetControl = document.querySelector('.reset-button');
-    resetControl.classList.add("disable");
-
-    // Eliminar tablero actual
-    var gameTable = document.querySelector('table');
-    document.querySelector('#game-table').removeChild(gameTable);
-
-    // Borramos la alerta de ganador
-    var winAlert = document.querySelector('.alert');
-    if (winAlert !== null) {
-        document.querySelector('#game-table').removeChild(winAlert);
-    }
-
-    if (winAlert === null) {
-        var match = new Match();
-        let url = new URL(document.location.href);
-        var username = url.searchParams.get("username");
-        match.incrementMatches(username, "giveUp");
-    }
-}
-
-// Función para saber si hay que elegir dificultad o no en función del modo de juego
-function playerSelected() {
-    var arrayGameMode = document.querySelectorAll('input[name="radio-gameMode"]');
-
-    // Recorremos el primer array de radio buttons (Modo de juego) en busca del checkeado
-    for (const gameMode of arrayGameMode) {
-        if (gameMode.checked === true) {
-            var selectedGameMode = gameMode.id;
-        }
-    }
-
-    var difficultyRadios = document.querySelector('.difficulty');
-    if (selectedGameMode === "onePlayer") {
-        difficultyRadios.classList.remove("disable");
-    } else {
-        difficultyRadios.classList.add("disable");
-    }
-}
-
 /* ************************ */
 /*          Clases          */
 /* ************************ */
@@ -648,3 +488,169 @@ class IaHandler {
         return bestScore;
     }
 }
+
+class InitIndexHandler {
+
+    constructor() {
+    }
+
+    // Función que añade todos los eventos de elementos del html
+    eventsHandler() {
+        if (sessionStorage.length === 0) {
+            document.location.target = "_self";
+            document.location.href = "error.html";
+        }
+        document.querySelector('.radio-onePlayer').addEventListener("click", function(){InitIndexHandler.playerSelected()});
+        document.querySelector('.stats').addEventListener("click", function(){InitIndexHandler.goToStats()});
+        document.querySelector('.sign-out').addEventListener("click", function(){InitIndexHandler.signOut()});
+        document.querySelector('.radio-twoPlayers').addEventListener("click", function(){InitIndexHandler.playerSelected()});
+        document.querySelector('.submit-button').addEventListener("click", function(){InitIndexHandler.formSubmit()});
+        document.querySelector('.reset-button').addEventListener("click", function(){InitIndexHandler.resetMatch()});
+
+        InitIndexHandler.cameraHandler();
+    }
+
+    // Función que maneja todo lo relacionado con la cámara
+    static cameraHandler() {
+        const webcamElement = document.getElementById('webcam');
+        const canvasElement = document.getElementById('canvas');
+        const webcam = new Webcam(webcamElement, 'user', canvasElement);
+
+        webcam.start();
+    }
+
+    // Función para ir a las estadíticas
+    static goToStats() {
+        let url = new URL(document.location.href);
+        var username = url.searchParams.get("username");
+
+        document.location.target = "_self";
+        document.location.href = "stats.html?username=" + username;
+    }
+
+    // Función para cerrar sesión
+    static signOut() {
+        let url = new URL(document.location.href);
+        var username = url.searchParams.get("username");
+
+        sessionStorage.removeItem(username);
+
+        document.location.target = "_self";
+        document.location.href = "login.html";
+    }
+
+    // Función que se ejecuta cuando pulsamos sobre el botón comenzar partida
+    static formSubmit() {
+        var alertsHandler = new AlertsHandler();
+
+        // Obtenemos las lista de radio buttons tanto del modo de juego como de la dificultad
+        var arrayGameMode = document.querySelectorAll('input[name="radio-gameMode"]:checked')[0];
+        var arrayGameDifficulty = document.querySelectorAll('input[name="radio-difficulty"]:checked')[0];
+
+        // Comprobamos si se han introducdo correctamente todos los datos necesarios, en caso negativo mensaje de error, en caso afirmativo
+        // se puede empezar la partida
+        if (arrayGameMode === undefined) {
+            var gameModeDiv = document.querySelector('.gameMode');
+            alertsHandler.createAlert("Seleccione un modo de juego", gameModeDiv, "alert-warning");
+        } else if (arrayGameDifficulty === undefined && arrayGameMode.id === "onePlayer"){
+            var difficultyDiv = document.querySelector('.difficulty');
+            alertsHandler.createAlert("Seleccione una dificultad", difficultyDiv, "alert-warning");
+        } else {
+            var gameMode = arrayGameMode.id;
+
+            if (arrayGameDifficulty !== undefined) {
+                var gameDifficulty = arrayGameDifficulty.id;
+            }
+
+            // Si queda alguna alerta abierta la cerramos
+            var confAlert = document.querySelector('.alert');
+            if(confAlert !== null) {
+                parent = confAlert.parentNode;
+                document.querySelector("." + parent.id).removeChild(confAlert);
+            }
+
+            // Deshabilitamos el form mientras se juega
+            var formControl = document.querySelector('#form-control');
+            formControl.classList.add("disable");
+
+            // Habilitamos el botón de resetear partida
+            var resetControl = document.querySelector('.reset-button');
+            resetControl.classList.remove("disable");
+
+            // Creamos el objeto partida
+            var match = new Match(gameMode, gameDifficulty, 1, {"00": 0, "01": 0, "02": 0, "10": 0, "11": 0, "12": 0, "20": 0, "21": 0, "22": 0},
+            ["00", "01", "02", "10", "11", "12", "20", "21", "22"], 0);
+
+            let url = new URL(document.location.href);
+            var username = url.searchParams.get("username");
+            if (gameMode === "onePlayer") {
+                const webcamElement = document.getElementById('webcam');
+                const canvasElement = document.getElementById('canvas');
+                const webcam = new Webcam(webcamElement, 'user', canvasElement);
+                var picture = webcam.snap();
+
+                match.incrementMatches(username, "init");
+            } else {
+                var picture = "../../assets/images/cross.png";
+            }
+
+            var iaHandler = new IaHandler();
+            var indexHandler = new IndexHandler();
+            var gameHandler = new GameHandler();
+            gameHandler.createTable(match, indexHandler, iaHandler, alertsHandler, username, picture);
+        }
+    } 
+
+    // Función que resetea la partida
+    static resetMatch() {
+        // Habilitamos el form 
+        var formControl = document.querySelector('#form-control');
+        formControl.classList.remove("disable");
+
+        // Deshabilitamos el botón de resetear partida
+        var resetControl = document.querySelector('.reset-button');
+        resetControl.classList.add("disable");
+
+        // Eliminar tablero actual
+        var gameTable = document.querySelector('table');
+        document.querySelector('#game-table').removeChild(gameTable);
+
+        // Borramos la alerta de ganador
+        var winAlert = document.querySelector('.alert');
+        if (winAlert !== null) {
+            document.querySelector('#game-table').removeChild(winAlert);
+        }
+
+        if (winAlert === null) {
+            var match = new Match();
+            let url = new URL(document.location.href);
+            var username = url.searchParams.get("username");
+            match.incrementMatches(username, "giveUp");
+        }
+    }
+
+    // Función para saber si hay que elegir dificultad o no en función del modo de juego
+    static playerSelected() {
+        var arrayGameMode = document.querySelectorAll('input[name="radio-gameMode"]');
+
+        // Recorremos el primer array de radio buttons (Modo de juego) en busca del checkeado
+        for (const gameMode of arrayGameMode) {
+            if (gameMode.checked === true) {
+                var selectedGameMode = gameMode.id;
+            }
+        }
+
+        var difficultyRadios = document.querySelector('.difficulty');
+        if (selectedGameMode === "onePlayer") {
+            difficultyRadios.classList.remove("disable");
+        } else {
+            difficultyRadios.classList.add("disable");
+        }
+    }
+}
+
+/* ************************ */
+/*          Inicio          */
+/* ************************ */
+var initIndexHandler = new InitIndexHandler();
+initIndexHandler.eventsHandler();
